@@ -1,6 +1,5 @@
 package com.honsoft.web.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +8,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "authority")
+public class Authority {
 
     @Id
     @Column(name = "seq")
@@ -20,13 +19,6 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "enabled")
-    private boolean enabled;
-    
-    @Transient
-    private String email;
-
+    @Column(name = "authority")
+    private String authority;
 }
