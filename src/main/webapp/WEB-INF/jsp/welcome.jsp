@@ -5,6 +5,6 @@
       <%@ page isELIgnored="false" %>
    </head>
    <body>
-      <h2>${message}</h2> in /WEB-INF/jsp/
+      안녕하세요? <h2>${message}</h2> in /WEB-INF/jsp/
    </body>
 </html>
