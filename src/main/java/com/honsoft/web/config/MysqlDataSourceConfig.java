@@ -3,7 +3,7 @@ package com.honsoft.web.config;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
-
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -24,14 +24,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@MapperScan(value={"com.honsoft.web.mapper.mysql"},sqlSessionFactoryRef = "mysqlSqlSessionFactory"		)
+@MapperScan(value = { "com.honsoft.web.mapper.mysql" }, sqlSessionFactoryRef = "mysqlSqlSessionFactory")
 @EnableTransactionManagement
 @PropertySource("classpath:/app.properties")
 public class MysqlDataSourceConfig {
 	@Autowired
 	private Environment env;
-	
-	@Bean(name="mysqlDataSource")
+
+	@Bean(name = "mysqlDataSource")
 	public DataSource dataSource() {
 		HikariDataSource ds = new HikariDataSource();
 		ds.setDriverClassName(env.getProperty("datasource.mysql.driver"));
@@ -40,17 +40,22 @@ public class MysqlDataSourceConfig {
 		ds.setPassword("Shoppingnt2021!@");
 		return ds;
 	}
-	
-	@Bean(name="mysqlSqlSessionFactory")
-	public SqlSessionFactory sqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource, ApplicationContext applicationContext) throws Exception {
+
+	@Bean(name = "mysqlSqlSessionFactory")
+	public SqlSessionFactory sqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource,
+			ApplicationContext applicationContext) throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource);
-		factoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mysql/mybatis-config.xml"));
-		//factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mybatis/mysql/mappers/*.xml"));
+
+		org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+		configuration.setMapUnderscoreToCamelCase(true);
+		configuration.setJdbcTypeForNull(JdbcType.NULL);
+		factoryBean.setConfiguration(configuration);
+
 		return factoryBean.getObject();
 	}
 
-	@Bean(name="mysqlSqlSession")
+	@Bean(name = "mysqlSqlSession")
 	public SqlSessionTemplate sqlSession(@Qualifier("mysqlSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
