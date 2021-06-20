@@ -17,6 +17,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,19 +42,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//auth.inMemoryAuthentication().withUser("user").password(bCryptPasswordEncoder().encode("password")).roles("USER");
+		auth.inMemoryAuthentication().withUser("user").password(bCryptPasswordEncoder().encode("pass")).roles("USER");
 		
 		//auth
         //.jdbcAuthentication()
         //.dataSource(dataSource())
         //.passwordEncoder(bCryptPasswordEncoder());
 		
-		auth.userDetailsService(quickGuideUserDetailsService);
+		//auth.userDetailsService(quickGuideUserDetailsService);
 	}
 	
 	@Bean
 	protected PasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web
+        .ignoring()
+           .antMatchers("/start.json"); // #3
+	}
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.antMatcher("/**").authorizeRequests().antMatchers("/**").permitAll();
 	}
 	
 	@Bean
