@@ -1,15 +1,18 @@
 package com.honsoft.web.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.honsoft.web.controller.BeanNameController;
 import com.honsoft.web.controller.ExampleInterceptor;
 
 @Configuration
@@ -43,5 +46,13 @@ public class WebConfig implements WebMvcConfigurer {
         .excludePathPatterns("/welcome*");
 	}
 	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("resources/**") .addResourceLocations("classpath:/static/") .setCachePeriod(60 * 60 * 24 * 365);
+	}
 	
+	@Bean("/simple")
+	public BeanNameController beanNameController() {
+		return new BeanNameController();
+	}
 }

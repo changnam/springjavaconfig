@@ -57,9 +57,9 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
 		System.out.println("handlerMapping class : "+handlerMapping.getClass().toString());
 		if (handlerMapping instanceof BeanNameUrlHandlerMapping) {
 			BeanNameUrlHandlerMapping beanNameUrlHandlerMapping = (BeanNameUrlHandlerMapping) handlerMapping;
-			//for (String urlMap : beanNameUrlHandlerMapping.getp().keySet()) {
-			//	System.out.println("==> urlMap : " + urlMap + " : " + beanNameUrlHandlerMapping.getUrlMap().get(urlMap));
-			//}
+			for (String urlMap : beanNameUrlHandlerMapping.getHandlerMap().keySet()) {
+				System.out.println("==> urlMap : " + urlMap + " : " + beanNameUrlHandlerMapping.getHandlerMap().get(urlMap));
+			}
 		} else if (handlerMapping instanceof SimpleUrlHandlerMapping) {
 			SimpleUrlHandlerMapping simpleUrlHandlerMapping = (SimpleUrlHandlerMapping) handlerMapping;
 			for (String urlMap : simpleUrlHandlerMapping.getUrlMap().keySet()) {
