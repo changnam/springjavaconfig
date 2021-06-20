@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@MapperScan(value = { "com.honsoft.web.mapper.mysql" }, sqlSessionFactoryRef = "mysqlSqlSessionFactory")
+@MapperScan(value = { "com.honsoft.web.mapper.mysql" }, sqlSessionFactoryRef = "mysqlSqlSessionFactory", nameGenerator = UniqueNameGenerator.class)
 @EnableTransactionManagement
 @PropertySource("classpath:/app.properties")
 public class MysqlDataSourceConfig {

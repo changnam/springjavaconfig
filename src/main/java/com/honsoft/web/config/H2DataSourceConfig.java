@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-//@Configuration
+@Configuration
 //@MapperScan(basePackages = { "com.honsoft" }}
-@MapperScan(value = {"com.honsoft.web.mapper.h2" }, sqlSessionFactoryRef = "h2SqlSessionFactory")
+@MapperScan(value = {"com.honsoft.web.mapper.h2" }, sqlSessionFactoryRef = "h2SqlSessionFactory", nameGenerator = UniqueNameGenerator.class)
 @EnableTransactionManagement
 @PropertySource("classpath:/app.properties")
 public class H2DataSourceConfig {

@@ -29,7 +29,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebSecurity (debug = true)
-@ComponentScan(basePackages = "com.honsoft")
+//@ComponentScan(basePackages = "com.honsoft")
 @EnableJpaRepositories("com.honsoft")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
@@ -106,6 +106,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	     return new PersistenceExceptionTranslationPostProcessor();
 	 }
     
+	 
+	 @Bean
+	 public QuickGuideUserDetailsService quickGuideUserDetailsService() {
+		 return new QuickGuideUserDetailsService();
+	 }
     private Properties additionalProperties(){
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
