@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web
         .ignoring()
-           .antMatchers("/start.json"); // #3
+           .antMatchers("/start.json","/h2-console/**"); // #3
 	}
 	
 	@Override

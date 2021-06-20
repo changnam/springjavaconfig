@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -40,6 +43,22 @@ public class H2DataSourceConfig {
 		return ds;
 	}
 
+	@Bean
+	public DataSourceInitializer dataSourceInitializer(@Qualifier("h2DataSource") DataSource datasource) {
+		ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+		resourceDatabasePopulator.addScript(new ClassPathResource("ddl/h2/schema-h2.sql"));
+		resourceDatabasePopulator.addScript(new ClassPathResource("ddl/h2/data-h2.sql"));
+		//resourceDatabasePopulator.addScript(new ClassPathResource("ddl/common/user-data.sql"));
+		//resourceDatabasePopulator.addScript(new ClassPathResource("ddl/common/order-data.sql"));
+
+		DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+		dataSourceInitializer.setDataSource(datasource);
+		dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
+		dataSourceInitializer.setEnabled(env.getProperty("h2.datasource.initialize", Boolean.class, false));
+         
+		return dataSourceInitializer;
+	}
+	
 	@Bean(name = "h2SqlSessionFactory")
 	public SqlSessionFactory sqlSessionFactory(@Qualifier("h2DataSource") DataSource dataSource,
 			ApplicationContext applicationContext) throws Exception {
@@ -55,4 +74,5 @@ public class H2DataSourceConfig {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 
+	
 }
